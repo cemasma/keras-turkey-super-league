@@ -2,7 +2,7 @@ import pandas as pd
 
 filename = "1-superlig.csv"
 path = "tr-turkey-master"
-innerPaths = [
+inner_paths = [
     "1994-95",
     "1995-96",
     "1996-97",
@@ -29,10 +29,16 @@ innerPaths = [
     "2017-18"
 ]
 
-dataList = []
+usefull_columns = ["Date", "Team 1", "Team 2", "FT", "HT"]
 
-for innerPath in innerPaths:
-    data = pd.read_csv(path + "\\" + innerPath + "\\" + filename)
-    dataList.append(data)
+def getdatalist():
+    datalist = []
+    for inner_path in inner_paths:
+        data = pd.read_csv(path + "\\" + inner_path + "\\" + filename)
+        data = data.replace("?", "-1")
+        datalist.append(data)
+    print(datalist[0][usefull_columns])
+    return datalist
 
-print(dataList[0])
+
+getdatalist()
