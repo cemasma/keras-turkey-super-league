@@ -45,9 +45,21 @@ def getdatalist():
         datalist.append(data[usefull_columns])
     return datalist
 
+
 def fill_number(data):
     team_array = get_team_array(data)
-    return team_array
+    for x in range(1, 3):
+        j = 0
+        for data_part in data:
+            i = 0
+            for team in data_part["Team " + str(x)]:
+                team = team_array.index(get_team_name(team))
+                data_part.set_value(i, "Team " + str(x), team)
+                i = i + 1
+            data[j] = data_part
+            j = j + 1
+    return data
+
 
 def get_team_array(data):
     team_array = []
@@ -58,15 +70,16 @@ def get_team_array(data):
                 team_array.index(team_name)
             except:
                 team_array.append(team_name)
-    print(team_array)
     return team_array
+
 
 def transform_data(data):
     imp = Imputer(missing_values=-99999, strategy="mean", axis=0)
     return imp.fit_transform(data)
 
+
 def get_team_name(name):
     return re.sub(r"\ \((\w+)\)", "", name)
 
 
-get_team_array(getdatalist())
+fill_number(getdatalist())
