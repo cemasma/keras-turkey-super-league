@@ -1,4 +1,9 @@
 import pandas as pd
+from sklearn.preprocessing import Imputer
+import numpy as np
+import pandas as pd
+
+import re
 
 filename = "1-superlig.csv"
 path = "tr-turkey-master"
@@ -29,16 +34,39 @@ inner_paths = [
     "2017-18"
 ]
 
-usefull_columns = ["Date", "Team 1", "Team 2", "FT", "HT"]
+usefull_columns = ["Team 1", "Team 2", "FT"]
+
 
 def getdatalist():
     datalist = []
     for inner_path in inner_paths:
         data = pd.read_csv(path + "\\" + inner_path + "\\" + filename)
-        data = data.replace("?", "-1")
-        datalist.append(data)
-    print(datalist[0][usefull_columns])
+        data = data.replace("?", "-99999")
+        datalist.append(data[usefull_columns])
     return datalist
 
+def fill_number(data):
+    team_array = get_team_array(data)
+    return team_array
 
-getdatalist()
+def get_team_array(data):
+    team_array = []
+    for data_part in data:
+        for team in data_part["Team 1"]:
+            team_name = get_team_name(team)
+            try:
+                team_array.index(team_name)
+            except:
+                team_array.append(team_name)
+    print(team_array)
+    return team_array
+
+def transform_data(data):
+    imp = Imputer(missing_values=-99999, strategy="mean", axis=0)
+    return imp.fit_transform(data)
+
+def get_team_name(name):
+    return re.sub(r"\ \((\w+)\)", "", name)
+
+
+get_team_array(getdatalist())
