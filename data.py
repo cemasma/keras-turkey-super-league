@@ -46,7 +46,7 @@ def getdatalist():
     return datalist
 
 
-def fill_number(data):
+def teams_to_numbers(data):
     team_array = get_team_array(data)
     for x in range(1, 3):
         j = 0
@@ -58,6 +58,27 @@ def fill_number(data):
                 i = i + 1
             data[j] = data_part
             j = j + 1
+
+    return data
+
+
+def ft_to_numbers(data):
+    j = 0
+    for data_part in data:
+        i = 0
+        for ft in data_part["FT"]:
+            result = ft.split("-")
+            score = int(result[0]) - int(result[1])
+            if score < 0:
+                data_part.set_value(i, "FT", -1)
+            if score > 0:
+                data_part.set_value(i, "FT", 1)
+            else:
+                data_part.set_value(i, "FT", 0)
+
+            i = i + 1
+        data[j] = data_part
+        j = j + 1
     return data
 
 
@@ -81,5 +102,19 @@ def transform_data(data):
 def get_team_name(name):
     return re.sub(r"\ \((\w+)\)", "", name)
 
+def get_data_as_matrix(data):
+    i = 0
+    matrix = []
+    for data_part in data:
+        data_arr = []
+        for column in data_part:
+            data_arr.append(data_part[column][i])
+            i = i + 1
+            if i  % 3 == 0:
+                matrix.append(data_arr)
+                data_arr = []
+    return matrix
 
-fill_number(getdatalist())
+data = ft_to_numbers(teams_to_numbers(getdatalist()))
+data = get_data_as_matrix(data)
+data = transform_data(data)

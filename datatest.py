@@ -1,13 +1,16 @@
 import unittest
-from data import get_team_name
+from data import *
 
 
 class DataTests(unittest.TestCase):
 
     def test_team_name(self):
-        print("test")
         self.assertEqual(get_team_name(
             "Gençlerbirliği Ankara SK (4)"), "Gençlerbirliği Ankara SK")
+    
+    def test_data_as_matrix(self):
+        data = ft_to_numbers(teams_to_numbers(getdatalist()))
+        self.assertEqual(get_data_as_matrix(data)[0], [0, 12, 1])
 
 
 if __name__ == "__main__":
