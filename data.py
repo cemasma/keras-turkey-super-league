@@ -53,6 +53,7 @@ def teams_to_numbers(data):
         for data_part in data:
             i = 0
             for team in data_part["Team " + str(x)]:
+                # print(get_team_name(team) + " = " + str(team_array.index(get_team_name(team))))
                 team = team_array.index(get_team_name(team))
                 data_part.set_value(i, "Team " + str(x), team)
                 i = i + 1

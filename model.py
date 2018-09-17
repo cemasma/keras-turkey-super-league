@@ -10,16 +10,20 @@ data = ft_to_numbers(teams_to_numbers(getdatalist()))
 data = get_data_as_matrix(data)
 data = transform_data(data)
 
-input = data[:,0:1]
+input = data[:,0:2]
 output = data[:,2]
 
 model = Sequential()
-model.add(Dense(64, input_dim=1))
+model.add(Dense(256, input_dim=2))
 model.add(Activation("relu"))
-model.add(Dense(64))
+model.add(Dense(256))
 model.add(Activation("relu"))
-model.add(Dense(32))
+model.add(Dense(256))
 model.add(Activation("softmax"))
 
 model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
-model.fit(input, output, epochs=5, batch_size=32,validation_split=0.13)
+model.fit(input, output, epochs=50, batch_size=32,validation_split=0.13)
+
+# Trabzonspor - Galatasaray 4-0 2018
+predict = np.array([7,5]).reshape(1,2)
+print(model.predict_classes(predict))
