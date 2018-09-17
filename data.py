@@ -69,9 +69,9 @@ def ft_to_numbers(data):
             result = ft.split("-")
             score = int(result[0]) - int(result[1])
             if score < 0:
-                data_part.set_value(i, "FT", -1)
-            elif score > 0:
                 data_part.set_value(i, "FT", 1)
+            elif score > 0:
+                data_part.set_value(i, "FT", 2)
             else:
                 data_part.set_value(i, "FT", 0)
 
@@ -115,8 +115,3 @@ def get_data_as_matrix(data):
                     matrix.append(data_arr)
                     data_arr = []
     return matrix
-
-
-data = ft_to_numbers(teams_to_numbers(getdatalist()))
-data = get_data_as_matrix(data)
-data = transform_data(data)
