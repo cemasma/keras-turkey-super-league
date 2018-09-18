@@ -25,5 +25,8 @@ model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=
 model.fit(input, output, epochs=50, batch_size=32,validation_split=0.13)
 
 # Trabzonspor - Galatasaray 4-0 2018
+# If prediction equal to 2 Trabzon wins
+# If prediction equal to 1 Tranbzon lose
+# If prediction equal to 0 match is draw
 predict = np.array([7,5]).reshape(1,2)
 print(model.predict_classes(predict))
