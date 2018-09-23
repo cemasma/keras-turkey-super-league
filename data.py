@@ -36,6 +36,8 @@ inner_paths = [
 
 usefull_columns = ["Team 1", "Team 2", "FT"]
 
+team_codes = {}
+
 
 def getdatalist():
     datalist = []
@@ -54,8 +56,9 @@ def teams_to_numbers(data):
             i = 0
             for team in data_part["Team " + str(x)]:
                 # print(get_team_name(team) + " = " + str(team_array.index(get_team_name(team))))
-                team = team_array.index(get_team_name(team))
-                data_part.set_value(i, "Team " + str(x), team)
+                team_number = team_array.index(get_team_name(team))
+                data_part.set_value(i, "Team " + str(x), team_number)
+                team_codes[get_team_name(team)] = team_number
                 i = i + 1
             data[j] = data_part
             j = j + 1
