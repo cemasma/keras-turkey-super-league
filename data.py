@@ -40,6 +40,7 @@ team_codes = {}
 
 
 def getdatalist():
+    """Collects all the data into an array and returns it"""
     datalist = []
     for inner_path in inner_paths:
         data = pd.read_csv(path + "\\" + inner_path + "\\" + filename)
@@ -49,13 +50,14 @@ def getdatalist():
 
 
 def teams_to_numbers(data):
+    """Refers the team names as numbers"""
     team_array = get_team_array(data)
     for x in range(1, 3):
         j = 0
         for data_part in data:
             i = 0
             for team in data_part["Team " + str(x)]:
-                # print(get_team_name(team) + " = " + str(team_array.index(get_team_name(team))))
+                # It use index numbers for converting team names to numbers
                 team_number = team_array.index(get_team_name(team))
                 data_part.set_value(i, "Team " + str(x), team_number)
                 team_codes[get_team_name(team)] = team_number
@@ -66,16 +68,20 @@ def teams_to_numbers(data):
 
 
 def ft_to_numbers(data):
+    """Refers the match results as numbers"""
     j = 0
     for data_part in data:
         i = 0
         for ft in data_part["FT"]:
             result = ft.split("-")
             score = int(result[0]) - int(result[1])
+            # If first team is lose the match then value will be 1
             if score < 0:
                 data_part.set_value(i, "FT", 1)
+            # If first team is winner then value will be 2
             elif score > 0:
                 data_part.set_value(i, "FT", 2)
+            # If the match result is equal then value will be 0
             else:
                 data_part.set_value(i, "FT", 0)
 
@@ -86,6 +92,7 @@ def ft_to_numbers(data):
 
 
 def get_team_array(data):
+    """Collects all the matches into an array"""
     team_array = []
     for data_part in data:
         for team in data_part["Team 1"]:
@@ -98,15 +105,19 @@ def get_team_array(data):
 
 
 def transform_data(data):
+    """Fills the missing numbers using mean values"""
     imp = Imputer(missing_values=-99999, strategy="mean", axis=0)
     return imp.fit_transform(data)
 
 
 def get_team_name(name):
+    """Parses team names in sended value"""
+    # Gençlerbirliği Ankara SK (4) -> Gençlerbirliği Ankara SK
     return re.sub(r"\ \((\w+)\)", "", name)
 
 
 def get_data_as_matrix(data):
+    """Turns data array to the matrix"""
     matrix = []
     for data_part in data:
         data_arr = []
