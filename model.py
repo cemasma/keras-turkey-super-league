@@ -26,13 +26,23 @@ model.compile(optimizer="adam",
               loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 model.fit(input, output, epochs=100, batch_size=32, validation_split=0.2)
 
+match_count = 0
+right_predictions = 0
+
 def make_predictions(matches):
+    global match_count
+    global right_predictions
+
     for match in matches:
         predict = np.array([match["Team 1"], match["Team 2"]]).reshape(1, 2)
         print(list(team_codes.keys())[list(team_codes.values()).index(match["Team 1"])] + " - " +
             list(team_codes.keys())[list(team_codes.values()).index(match["Team 2"])]
             + "\nResult: " + str(match["Result"])
             + "\nPredict: " + str(model.predict_classes(predict)[0]) + "\n\n")
+
+        match_count = match_count + 1
+        if(match["Result"] == model.predict_classes(predict)[0]):
+            right_predictions = right_predictions + 1
     print("\n\n")
 
 make_predictions(first_week_matches())
@@ -49,6 +59,9 @@ make_predictions(twelveth_week_matches())
 make_predictions(thirteenth_week_matches())
 
 
+print("\n\nMatch Count:" + str(match_count) + 
+    "\nRight Prediction Count:" + str(right_predictions) + 
+    "\nPercentage: " + str(right_predictions * 100 / match_count))
 
 # Trabzonspor - Galatasaray 4-0 2018
 # If prediction equal to 2 Trabzon wins
